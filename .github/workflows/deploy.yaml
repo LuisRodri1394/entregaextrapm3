@@ -9,25 +9,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Autenticacao no Google Cloud
+    - name: Autenticar no Google Cloud
       uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
-  
 
-    - name: Configurar GCloud SDK
-      uses: google-github-actions/setup-gcloud@v1 
-      with:
-        project_id: ${{ secrets.GCP_PROJECT }}
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1    
     
-    - name: Autenticar Docker
-      shell: pwsh
-      run: |
-        $env:GCLOUD_KEY=${{ secrets.GCP_SA_KEY }}
-        $env:GCLOUD_KEY | Out-File -FilePath "sa-key.json" -Encoding utf8
-        gcloud auth activate-service-account --key-file="sa-key.json"
-        gcloud auth configure-docker "us-central1-docker.pkg.dev" --quiet
-        Remove-Item -Path "sa-key.json"
+    - name: Configure Docker
+      run: gcloud auth configure-docker us-central1-docker.pkg.dev
     
     - name: Build and Push Backend
       working-directory: ./backend
