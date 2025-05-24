@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Autenticar no Google Cloud
+    - name: Autenticacao no Google Cloud
       uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
